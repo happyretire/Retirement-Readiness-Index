@@ -1,22 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Sun, Moon } from 'lucide-react';
 
 const Layout = () => {
   const navigate = useNavigate();
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('k-rri-theme');
+    if (saved) return saved === 'dark';
+    return true; // 기본 모드: 다크
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    localStorage.setItem('k-rri-theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   return (
     <div className="app-container">
-      {/* 글로벌 헤더 (필요시 '뒤로가기' 제공) */}
       <header style={{
         padding: '1rem',
-        borderBottom: '1px solid #E2E8F0',
+        borderBottom: `1px solid var(--border-color)`,
         display: 'flex',
         alignItems: 'center',
-        background: 'white'
+        background: 'var(--header-bg)',
+        transition: 'background-color 0.3s ease'
       }}>
-        <button 
-          onClick={() => navigate(-1)} 
+        <button
+          onClick={() => navigate(-1)}
           style={{
             background: 'none',
             border: 'none',
@@ -30,18 +40,23 @@ const Layout = () => {
         >
           <ChevronLeft size={28} />
         </button>
-        <h1 style={{ 
-          margin: '0 auto', 
-          fontSize: '1.25rem', 
-          transform: 'translateX(-20px)',
+        <h1 style={{
+          margin: '0 auto',
+          fontSize: '1.25rem',
           color: 'var(--text-main)',
           fontWeight: '700'
         }}>
           인생 2막 나침반
         </h1>
+        <button
+          className="theme-toggle"
+          onClick={() => setIsDark(!isDark)}
+          aria-label={isDark ? '라이트 모드로 전환' : '다크 모드로 전환'}
+        >
+          {isDark ? <Sun size={22} /> : <Moon size={22} />}
+        </button>
       </header>
 
-      {/* 라우팅 컨텐츠 렌더링 */}
       <main className="main-content">
         <Outlet />
       </main>

@@ -4,7 +4,7 @@ export const surveyCategories = [
     { id: 'residence', title: '주거 안정성', description: '인프라 접근성 및 주택 자산 유동화 의지' },
     { id: 'health', title: '건강 및 간병', description: '규칙적 건강관리 및 장기간병 리스크 대비' },
     { id: 'social', title: '사회적 관계', description: '배우자 소통 및 수평적 네트워크 구축' },
-    { id: 'career', title: '자기계발 및 N잡', description: '디지털 생존력 및 지속적 소득 창출 역량' }
+    { id: 'career', title: '배움과 능동적 여가', description: '디지털 생존력 및 지속가능한 소일거리 역량' }
 ];
 
 // 공통 5점 리커트 척도 옵션
@@ -45,7 +45,7 @@ export const questions = [
     { id: 's4', category: 'social', text: '은퇴 후에 하루 종일 생기게 될 나만의 자유 시간을 어떻게 채워 나갈지 대략적인 시간표를 짜보신 적이 있나요?', options: likertOptions },
     { id: 's5', category: 'social', text: '내가 그동안 쌓은 경험과 재능을 사회에 기부하거나 봉사하면서 새로운 보람을 찾을 계획이 있으신가요?', options: likertOptions },
 
-    // 5. 직업 및 자기계발 (Career & Learning)
+    // 5. 배움과 능동적 여가 (Career & Learning)
     { id: 'c1', category: 'career', text: '지금 다니는 직장을 그만두더라도, 한 달에 적은 생활비라도 꾸준히 벌 수 있는 나만의 기술이나 소일거리가 있나요?', options: likertOptions },
     { id: 'c2', category: 'career', text: '은행 앱 이체, 식당 키오스크 주문, 스마트폰 기차 예매 등 새로운 디지털 기기를 혼자서 쓰는 데 어려움이 없으신가요?', options: likertOptions },
     { id: 'c3', category: 'career', text: '일과는 상관없이, 오랫동안 푹 빠져서 남들에게 가르쳐 줄 수 있을 만큼 전문성을 쌓은 취미나 특기가 있나요?', options: likertOptions },

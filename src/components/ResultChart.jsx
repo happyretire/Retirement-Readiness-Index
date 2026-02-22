@@ -19,12 +19,12 @@ ChartJS.register(
     Legend
 );
 
-const ResultChart = ({ data }) => {
+const ResultChart = ({ data, peerData, peerLabel }) => {
     // data 객체의 프로퍼티가 넘어온다고 가정: 
     // { financial: 80, residence: 90, health: 60, social: 70, career: 50 }
 
     const chartData = {
-        labels: ['경제적 자립도', '주거 안정성', '건강/간병', '사회적 관계', '자기계발/N잡'],
+        labels: ['경제적 자립도', '주거 안정성', '건강/간병', '사회적 관계', '배움/여가'],
         datasets: [
             {
                 label: '내 준비도',
@@ -44,8 +44,8 @@ const ResultChart = ({ data }) => {
                 pointHoverBorderColor: 'rgba(30, 64, 175, 1)',
             },
             {
-                label: '동일 연령대 평균 (예시)',
-                data: [65, 70, 55, 60, 45],
+                label: peerLabel || '유사 그룹 평균',
+                data: peerData || [65, 70, 55, 60, 45],
                 backgroundColor: 'rgba(156, 163, 175, 0.1)',
                 borderColor: 'rgba(156, 163, 175, 0.5)',
                 borderWidth: 1.5,
@@ -102,4 +102,4 @@ const ResultChart = ({ data }) => {
     return <Radar data={chartData} options={options} />;
 };
 
-export default ResultChart;
+export default React.memo(ResultChart);

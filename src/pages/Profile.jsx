@@ -6,7 +6,8 @@ const Profile = () => {
 
     // 1. 기본 인적 사항
     const [ageRange, setAgeRange] = useState('50');
-    const [gender, setGender] = useState('male');
+    const [gender, setGender] = useState('female');
+    const [job, setJob] = useState('employee'); // 직업 카테고리 추가
 
     // 2. 경제적 기초 데이터 (슬라이더 활용)
     const [totalAsset, setTotalAsset] = useState(5); // 0~20 (단위: 억)
@@ -29,6 +30,7 @@ const Profile = () => {
             state: {
                 ageRange,
                 gender,
+                job,
                 totalAsset,
                 realEstateRatio,
                 childrenStatus
@@ -50,7 +52,7 @@ const Profile = () => {
             <form onSubmit={handleSubmit}>
                 {/* 1. 기본 인적 사항 */}
                 <div className="form-group mb-8">
-                    <label className="form-label" style={{ borderBottom: '2px solid #E2E8F0', paddingBottom: '0.5rem' }}>연령 및 성별</label>
+                    <label className="form-label" style={{ borderBottom: '2px solid var(--border-color)', paddingBottom: '0.5rem' }}>연령 및 성별</label>
 
                     <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', marginTop: '1rem' }}>
                         {['40', '50', '60'].map(val => (
@@ -86,9 +88,33 @@ const Profile = () => {
                     </div>
                 </div>
 
+                {/* 추가: 직업 카테고리 */}
+                <div className="form-group mb-8">
+                    <label className="form-label" style={{ borderBottom: '2px solid var(--border-color)', paddingBottom: '0.5rem' }}>현재 경제활동 상태</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
+                        {[
+                            { id: 'employee', label: '직장인 (매월 일정한 급여를 받아요)' },
+                            { id: 'business', label: '자영업/사업 (내 사업이나 가게를 운영해요)' },
+                            { id: 'freelance', label: '프리랜서/N잡 (자유롭게 일하며 수익을 내요)' },
+                            { id: 'homemaker', label: '전업주부 (가정을 돌보며 안살림을 책임져요)' },
+                            { id: 'retired', label: '은퇴/반은퇴 (연금 등으로 생활하며 소일거리를 해요)' }
+                        ].map(opt => (
+                            <button
+                                key={opt.id}
+                                type="button"
+                                className={`btn ${job === opt.id ? 'btn-primary' : 'btn-outline'}`}
+                                style={{ padding: '1rem', fontSize: 'var(--text-md)', textAlign: 'left', justifyContent: 'flex-start', lineHeight: '1.4' }}
+                                onClick={() => setJob(opt.id)}
+                            >
+                                {opt.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 {/* 2. 경제적 기초 (슬라이더) */}
                 <div className="form-group mb-8">
-                    <label className="form-label" style={{ borderBottom: '2px solid #E2E8F0', paddingBottom: '0.5rem' }}>자산 현황 대략적 입력 (구간 선택)</label>
+                    <label className="form-label" style={{ borderBottom: '2px solid var(--border-color)', paddingBottom: '0.5rem' }}>자산 현황 대략적 입력 (구간 선택)</label>
 
                     <div className="mt-4">
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
@@ -124,7 +150,7 @@ const Profile = () => {
 
                 {/* 3. 가족 및 자녀 상태 */}
                 <div className="form-group mb-8">
-                    <label className="form-label" style={{ borderBottom: '2px solid #E2E8F0', paddingBottom: '0.5rem' }}>자녀 독립 상태</label>
+                    <label className="form-label" style={{ borderBottom: '2px solid var(--border-color)', paddingBottom: '0.5rem' }}>자녀 독립 상태</label>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
                         {[
                             { id: 'none', label: '자녀 없음' },

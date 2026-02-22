@@ -1,20 +1,30 @@
 :root {
   /* Color Palette (Ocean Blue & Grayscale) */
   --primary: #1E40AF;
-  /* Ocean Blue */
   --primary-hover: #1D4ED8;
+  --primary-dark: #2563EB;
   --primary-light: #EFF6FF;
   --secondary: #3B82F6;
 
   --bg-color: #F8FAFC;
   --card-bg: #FFFFFF;
+  --header-bg: #FFFFFF;
+  --border-color: #E2E8F0;
 
   --text-main: #0F172A;
   --text-muted: #64748B;
 
   --success: #10B981;
-  --warning: #F59E0B;
+  --warning: #D97706;
   --danger: #EF4444;
+
+  /* Prescription card colors */
+  --rx-bg-green: #F0FDF4;
+  --rx-bg-amber: #FFF7ED;
+  --rx-text-green: #166534;
+  --rx-text-amber: #9A3412;
+  --rx-border-green: #BBF7D0;
+  --rx-border-amber: #FED7AA;
 
   /* Typography - Senior Friendly */
   --font-base: 'Pretendard', 'Inter', sans-serif;
@@ -40,10 +50,46 @@
   --max-width: 600px;
 }
 
+/* ===== Dark Mode ===== */
+[data-theme="dark"] {
+  --primary: #60A5FA;
+  --primary-hover: #3B82F6;
+  --primary-dark: #93C5FD;
+  --primary-light: #1E3A5F;
+  --secondary: #93C5FD;
+
+  --bg-color: #0F172A;
+  --card-bg: #1E293B;
+  --header-bg: #1E293B;
+  --border-color: #334155;
+
+  --text-main: #F1F5F9;
+  --text-muted: #94A3B8;
+
+  --success: #34D399;
+  --warning: #FBBF24;
+  --danger: #F87171;
+
+  --rx-bg-green: #064E3B;
+  --rx-bg-amber: #451A03;
+  --rx-text-green: #A7F3D0;
+  --rx-text-amber: #FDE68A;
+  --rx-border-green: #065F46;
+  --rx-border-amber: #78350F;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -53,6 +99,15 @@ body {
   line-height: 1.6;
   font-size: var(--text-md);
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:active {
+  transform: scale(0.97);
 }
 
 /* App Layout */
@@ -85,6 +140,10 @@ body {
   color: var(--text-muted);
 }
 
+.text-main {
+  color: var(--text-main);
+}
+
 .text-success {
   color: var(--success);
 }
@@ -109,6 +168,10 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
 .mb-4 {
   margin-bottom: 1rem;
 }
@@ -121,12 +184,29 @@ body {
   margin-bottom: 2rem;
 }
 
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
 
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
 .mt-8 {
   margin-top: 2rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 /* Buttons - Large & Easy to Tap */
@@ -149,6 +229,10 @@ body {
   color: white;
 }
 
+[data-theme="dark"] .btn-primary {
+  color: #0F172A;
+}
+
 .btn-primary:hover {
   background-color: var(--primary-hover);
   transform: translateY(-2px);
@@ -166,12 +250,13 @@ body {
 }
 
 .btn-secondary {
-  background-color: #E2E8F0;
+  background-color: var(--border-color);
   color: var(--text-main);
 }
 
 .btn-secondary:hover {
-  background-color: #CBD5E1;
+  background-color: var(--text-muted);
+  color: white;
 }
 
 /* Form Controls */
@@ -193,14 +278,14 @@ body {
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow: var(--shadow-sm);
-  border: 1px solid #E2E8F0;
+  border: 1px solid var(--border-color);
   margin-bottom: 1rem;
 }
 
 /* Progress Bar */
 .progress-container {
   width: 100%;
-  background-color: #E2E8F0;
+  background-color: var(--border-color);
   border-radius: var(--radius-full);
   height: 12px;
   margin-bottom: 0.5rem;
@@ -228,4 +313,41 @@ body {
 
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--primary);
+  transform: scale(1.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
