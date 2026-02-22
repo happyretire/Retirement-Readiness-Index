@@ -59,6 +59,17 @@ const Layout = () => {
 
       <main className="main-content">
         <Outlet />
+        <footer style={{
+          padding: '2rem 1rem',
+          textAlign: 'center',
+          fontSize: '0.8rem',
+          color: 'var(--text-muted)',
+          borderTop: '1px solid var(--border-color)',
+          marginTop: '2rem'
+        }}>
+          <p>© 2026 Dunam. All rights reserved.</p>
+          <p style={{ marginTop: '0.4rem', opacity: 0.8 }}>인생 2막 나침반 Version 0.8.0</p>
+        </footer>
       </main>
     </div>
   );
