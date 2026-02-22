@@ -22,7 +22,7 @@ const Home = () => {
                     alignItems: 'center'
                 }}>
                     <img
-                        src="/images/main_garden.png"
+                        src="images/main_garden.png"
                         alt="K-RRI 홈 가든 씬"
                         style={{
                             width: '230px',

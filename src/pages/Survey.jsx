@@ -4,31 +4,31 @@ import { questions, calculateScores, surveyCategories } from '../utils/surveyDat
 
 const introData = {
     financial: {
-        image: '/images/intro_financial.png',
+        image: 'images/intro_financial.png',
         color: '#D97706',
         bgColor: '#FEF3C7',
         message: "차곡차곡 모아온 내일\n수확의 시간을 점검합니다"
     },
     residence: {
-        image: '/images/intro_residence.png',
+        image: 'images/intro_residence.png',
         color: '#EA580C',
         bgColor: '#FFEDD5',
         message: "마음 편히 쉴 수 있는\n나만의 보금자리를 그립니다"
     },
     health: {
-        image: '/images/intro_health.png',
+        image: 'images/intro_health.png',
         color: '#059669',
         bgColor: '#D1FAE5',
         message: "흔들림 없는 인생 2막\n튼튼한 방어막을 세웁니다"
     },
     social: {
-        image: '/images/intro_social.png',
+        image: 'images/intro_social.png',
         color: '#DB2777',
         bgColor: '#FCE7F3',
         message: "명함 없이도 환영받는\n온기 가득한 만남을 향해 갑니다"
     },
     career: {
-        image: '/images/intro_career.png',
+        image: 'images/intro_career.png',
         color: '#4F46E5',
         bgColor: '#E0E7FF',
         message: "새로운 지혜의 발견\n설레는 배움의 돛을 올립니다"
