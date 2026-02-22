@@ -20,8 +20,19 @@ ChartJS.register(
 );
 
 const ResultChart = ({ data, peerData, peerLabel }) => {
-    // data 객체의 프로퍼티가 넘어온다고 가정: 
-    // { financial: 80, residence: 90, health: 60, social: 70, career: 50 }
+    const [isDark, setIsDark] = React.useState(() => document.documentElement.getAttribute('data-theme') === 'dark');
+
+    React.useEffect(() => {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'data-theme') {
+                    setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+        return () => observer.disconnect();
+    }, []);
 
     const chartData = React.useMemo(() => ({
         labels: ['경제적 자립도', '주거 안정성', '건강/간병', '사회적 관계', '배움/여가'],
@@ -54,7 +65,7 @@ const ResultChart = ({ data, peerData, peerLabel }) => {
                 pointRadius: 3
             }
         ],
-    }), [data, peerData, peerLabel]);
+    }), [data, peerData, peerLabel, isDark]);
 
     const options = React.useMemo(() => ({
         responsive: true,
@@ -63,22 +74,26 @@ const ResultChart = ({ data, peerData, peerLabel }) => {
             r: {
                 angleLines: {
                     display: true,
-                    color: 'rgba(0,0,0,0.1)'
+                    color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                },
+                grid: {
+                    color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
                 },
                 suggestedMin: 0,
                 suggestedMax: 100,
                 ticks: {
                     stepSize: 20,
                     backdropColor: 'transparent',
+                    color: isDark ? '#94A3B8' : '#64748B', // text-muted
                     font: { size: 10 }
                 },
                 pointLabels: {
                     font: {
                         size: 13,
                         family: "'Pretendard', sans-serif",
-                        weight: '600'
+                        weight: '700' // 가독성을 위해 700으로 상향
                     },
-                    color: '#0F172A' // --text-main
+                    color: isDark ? '#60A5FA' : '#1E40AF' // primary theme color
                 }
             }
         },
@@ -86,18 +101,19 @@ const ResultChart = ({ data, peerData, peerLabel }) => {
             legend: {
                 position: 'bottom',
                 labels: {
-                    font: { size: 12, family: "'Pretendard', sans-serif" }
+                    font: { size: 12, family: "'Pretendard', sans-serif" },
+                    color: isDark ? '#F1F5F9' : '#0F172A' // text-main
                 }
             },
             tooltip: {
-                backgroundColor: 'rgba(15, 23, 42, 0.9)', // text-main
+                backgroundColor: 'rgba(15, 23, 42, 0.9)',
                 titleFont: { size: 14, family: "'Pretendard', sans-serif" },
                 bodyFont: { size: 13, family: "'Pretendard', sans-serif" },
                 padding: 12,
                 cornerRadius: 8
             }
         }
-    }), []);
+    }), [isDark]);
 
     return <Radar data={chartData} options={options} />;
 };
