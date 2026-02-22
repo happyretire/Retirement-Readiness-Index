@@ -4,7 +4,6 @@ import { AlertTriangle, CheckCircle, Info, BarChart3, Gauge, Lightbulb, Heart, T
 import ResultChart from '../components/ResultChart';
 import { surveyCategories } from '../utils/surveyData';
 import { getPersona, getStatusText, getPrescriptionTitle, getPrescriptionDesc, getAgeComment, getSpecialInsight, getPeerComparisonContext, SCORE_TIER } from '../utils/resultRules';
-import { useExport } from '../hooks/useExport';
 
 const getStatusIcon = (score) => {
     if (score >= SCORE_TIER.HIGH) return <CheckCircle size={24} className="text-success" color="var(--success)" />;
@@ -142,8 +141,6 @@ const Result = () => {
     const location = useLocation();
     const { resultData, ageRange, profileData } = location.state || {};
 
-    const { exportToImage, exportToPDF, isExporting } = useExport();
-
     // Find worst 2 categories for prescriptions
     const worstTwo = React.useMemo(() => {
         if (!resultData) return [];
@@ -164,12 +161,12 @@ const Result = () => {
         );
     }
 
-    const persona = getPersona(resultData);
-    const specialInsight = getSpecialInsight(profileData, resultData);
-    const peerComparison = getPeerComparisonContext(profileData);
+    const persona = React.useMemo(() => getPersona(resultData), [resultData]);
+    const specialInsight = React.useMemo(() => getSpecialInsight(profileData, resultData), [profileData, resultData]);
+    const peerComparison = React.useMemo(() => getPeerComparisonContext(profileData), [profileData]);
 
-    const scoreDiff = resultData.total - peerComparison.averageScore;
-    const isAboveAverage = scoreDiff >= 0;
+    const scoreDiff = React.useMemo(() => resultData.total - peerComparison.averageScore, [resultData, peerComparison]);
+    const isAboveAverage = React.useMemo(() => scoreDiff >= 0, [scoreDiff]);
 
     return (
         <div className="animate-fade-in pb-8">
@@ -237,29 +234,13 @@ const Result = () => {
                 </footer>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem', padding: '0 1rem', maxWidth: '600px', margin: '1.5rem auto 0', flexWrap: 'wrap' }}>
-                <button
-                    className="btn btn-outline"
-                    onClick={() => exportToPDF('result-capture-area', 'KRRI_은퇴준비리포트.pdf')}
-                    disabled={isExporting}
-                    style={{ flex: 1, minWidth: '120px', padding: '1rem 0.5rem', fontSize: 'var(--text-md)' }}
-                >
-                    {isExporting ? '처리 중...' : 'PDF 다운로드'}
-                </button>
+            <div style={{ marginTop: '2rem', padding: '0 1rem', maxWidth: '600px', margin: '2rem auto 0', textAlign: 'center' }}>
                 <button
                     className="btn btn-primary"
-                    onClick={() => exportToImage('result-capture-area', 'KRRI_은퇴준비리포트.png')}
-                    disabled={isExporting}
-                    style={{ flex: 1, minWidth: '120px', padding: '1rem 0.5rem', fontSize: 'var(--text-md)' }}
-                >
-                    {isExporting ? '처리 중...' : '이미지 저장'}
-                </button>
-                <button
-                    className="btn btn-outline"
                     onClick={() => navigate('/')}
-                    style={{ width: '100%', padding: '1rem', fontSize: 'var(--text-md)', marginTop: '0.5rem' }}
+                    style={{ width: '100%', padding: '1rem', fontSize: 'var(--text-md)' }}
                 >
-                    처음으로
+                    진단 다시하기 (처음으로)
                 </button>
             </div>
         </div>

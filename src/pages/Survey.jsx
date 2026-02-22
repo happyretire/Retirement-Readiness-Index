@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { questions, calculateScores, surveyCategories } from '../utils/surveyData';
 
@@ -52,7 +52,7 @@ const Survey = () => {
     } = location.state || {};
 
     // profileData를 개별 필드로부터 구성
-    const profileData = { ageRange, gender, job, totalAsset, realEstateRatio, childrenStatus };
+    const profileData = useMemo(() => ({ ageRange, gender, job, totalAsset, realEstateRatio, childrenStatus }), [ageRange, gender, job, totalAsset, realEstateRatio, childrenStatus]);
 
     // 이미지 프리로딩 (네트워크 딜레이 방역)
     useEffect(() => {
@@ -70,7 +70,7 @@ const Survey = () => {
         return Math.round((currentQuestionIndex / questions.length) * 100);
     };
 
-    const handleSelectOption = (score) => {
+    const handleSelectOption = useCallback((score) => {
         const currentQ = questions[currentQuestionIndex];
         const newAnswer = {
             id: currentQ.id,
@@ -94,7 +94,7 @@ const Survey = () => {
             const resultData = calculateScores(newAnswers, ageRange);
             navigate('/result', { state: { resultData, ageRange, profileData } });
         }
-    };
+    }, [currentQuestionIndex, answers, ageRange, profileData, navigate]);
 
     // 표지 렌더링
     if (showIntro) {

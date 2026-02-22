@@ -23,7 +23,7 @@ const ResultChart = ({ data, peerData, peerLabel }) => {
     // data 객체의 프로퍼티가 넘어온다고 가정: 
     // { financial: 80, residence: 90, health: 60, social: 70, career: 50 }
 
-    const chartData = {
+    const chartData = React.useMemo(() => ({
         labels: ['경제적 자립도', '주거 안정성', '건강/간병', '사회적 관계', '배움/여가'],
         datasets: [
             {
@@ -54,9 +54,9 @@ const ResultChart = ({ data, peerData, peerLabel }) => {
                 pointRadius: 3
             }
         ],
-    };
+    }), [data, peerData, peerLabel]);
 
-    const options = {
+    const options = React.useMemo(() => ({
         responsive: true,
         maintainAspectRatio: false,
         scales: {
@@ -97,7 +97,7 @@ const ResultChart = ({ data, peerData, peerLabel }) => {
                 cornerRadius: 8
             }
         }
-    };
+    }), []);
 
     return <Radar data={chartData} options={options} />;
 };
