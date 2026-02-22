@@ -95,55 +95,90 @@ export const downloadAsPDF = async (element, fileName = 'k-rri-result.pdf') => {
         // 원본 요소 px → 캔버스 px 스케일
         const canvasScale = canvas.width / element.scrollWidth;
 
-        // data-pdf-break 마커로 분할 지점 찾기
-        let breakPx = 0;
-        const marker = element.querySelector('[data-pdf-break]');
-        if (marker && marker.offsetTop > 0) {
-            breakPx = Math.round(marker.offsetTop * canvasScale);
-        }
+        // data-pdf-break 마커들로 분할 지점(배열) 찾기
+        const breakPoints = [];
+        const markers = element.querySelectorAll('[data-pdf-break]');
+        const elementRect = element.getBoundingClientRect();
 
-        // 마커 없으면 자식 요소 경계 기반 분할
-        if (breakPx <= 0) {
-            const page1MaxPx = Math.round((innerHeight / innerWidth) * canvas.width);
-            for (const child of element.children) {
-                const bottom = Math.round((child.offsetTop + child.offsetHeight) * canvasScale);
-                if (bottom <= page1MaxPx) {
-                    breakPx = bottom;
-                }
+        markers.forEach(marker => {
+            const relativeTop = marker.getBoundingClientRect().top - elementRect.top;
+            if (relativeTop > 0) {
+                breakPoints.push(Math.round(relativeTop * canvasScale));
             }
+        });
+
+        // 분할 지점이 없으면 캔버스 절반에서 임의 분할 (기존 폴백 로직 유지)
+        if (breakPoints.length === 0) {
+            breakPoints.push(Math.round(canvas.height / 2));
         }
 
-        // 안전장치: breakPx가 유효하지 않으면 캔버스 절반에서 분할
-        if (breakPx <= 0 || breakPx >= canvas.height) {
-            breakPx = Math.round(canvas.height / 2);
+        // --- 3) 캔버스 다중 분할 ---
+        const pageCanvases = [];
+        let currentY = 0;
+
+        for (let i = 0; i < breakPoints.length; i++) {
+            const splitY = breakPoints[i];
+            const segmentHeight = splitY - currentY;
+
+            if (segmentHeight > 0) {
+                const segmentCanvas = document.createElement('canvas');
+                segmentCanvas.width = canvas.width;
+                segmentCanvas.height = segmentHeight;
+                segmentCanvas.getContext('2d').drawImage(
+                    canvas, 0, currentY, canvas.width, segmentHeight,
+                    0, 0, canvas.width, segmentHeight
+                );
+                pageCanvases.push(segmentCanvas);
+            }
+            currentY = splitY;
         }
 
-        // --- 3) 캔버스 분할 ---
-        const { topCanvas, bottomCanvas } = splitCanvas(canvas, breakPx);
+        // 마지막 남은 영역 캡처
+        const lastSegmentHeight = canvas.height - currentY;
+        if (lastSegmentHeight > 0) {
+            const segmentCanvas = document.createElement('canvas');
+            segmentCanvas.width = canvas.width;
+            segmentCanvas.height = lastSegmentHeight;
+            segmentCanvas.getContext('2d').drawImage(
+                canvas, 0, currentY, canvas.width, lastSegmentHeight,
+                0, 0, canvas.width, lastSegmentHeight
+            );
+            pageCanvases.push(segmentCanvas);
+        }
 
         // --- 4) PDF 생성 ---
         const pdf = new jsPDF('p', 'mm', 'a4');
         const imgWidth = innerWidth;
 
-        // 페이지 1
-        const img1H = (topCanvas.height * imgWidth) / topCanvas.width;
-        pdf.addImage(
-            topCanvas.toDataURL('image/jpeg', 0.92),
-            'JPEG', margin, margin, imgWidth, img1H
-        );
+        pageCanvases.forEach((pageCanvas, index) => {
+            // 빈 페이지 방지 방어 코드
+            if (pageCanvas.height <= 10) return;
 
-        // 페이지 2
-        if (bottomCanvas.height > 10) {
-            pdf.addPage();
-            pdf.setFillColor(248, 250, 252);
-            pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+            if (index > 0) {
+                pdf.addPage();
+                pdf.setFillColor(248, 250, 252);
+                pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+            }
 
-            const img2H = (bottomCanvas.height * imgWidth) / bottomCanvas.width;
+            const imgRatio = (pageCanvas.height * imgWidth) / pageCanvas.width;
+
+            // 페이지가 A4 세로 높이보다 길면 잘리지 않도록 강제 축소 맞춤 처리
+            let imgH = imgRatio;
+            let currentImgWidth = imgWidth;
+            let marginX = margin;
+
+            if (imgH > innerHeight) {
+                const resizeRatio = innerHeight / imgH;
+                currentImgWidth = imgWidth * resizeRatio;
+                imgH = innerHeight;
+                marginX = margin + ((imgWidth - currentImgWidth) / 2); // 중앙 정렬
+            }
+
             pdf.addImage(
-                bottomCanvas.toDataURL('image/jpeg', 0.92),
-                'JPEG', margin, margin, imgWidth, img2H
+                pageCanvas.toDataURL('image/jpeg', 0.95),
+                'JPEG', marginX, margin, currentImgWidth, imgH
             );
-        }
+        });
 
         pdf.save(fileName);
     } catch (error) {

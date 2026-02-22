@@ -142,7 +142,7 @@ const Result = () => {
     const location = useLocation();
     const { resultData, ageRange, profileData } = location.state || {};
 
-    const { exportToImage, isExporting } = useExport();
+    const { exportToImage, exportToPDF, isExporting } = useExport();
 
     // Find worst 2 categories for prescriptions
     const worstTwo = React.useMemo(() => {
@@ -181,6 +181,21 @@ const Result = () => {
                 padding: '1rem',
                 paddingBottom: '2.5rem' // 하단 정보 누락 방지를 위한 패딩 추가
             }}>
+                {/* 리포트 헤더 템플릿 영역 */}
+                <div style={{ padding: '0.5rem 0.5rem 1.5rem', borderBottom: '2px solid var(--border-color)', marginBottom: '1.5rem', textAlign: 'left' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                        <div>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--primary)', letterSpacing: '1px' }}>RETIREMENT READINESS INDEX</span>
+                            <h1 style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--text-main)', margin: '0.25rem 0 0', letterSpacing: '-0.5px' }}>
+                                나의 K-RRI 은퇴 준비 리포트
+                            </h1>
+                        </div>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                            발행일: {new window.Date().toLocaleDateString('ko-KR')}
+                        </span>
+                    </div>
+                </div>
+
                 <PersonaCard persona={persona} />
                 <InsightCard specialInsight={specialInsight} />
                 <ScoreCard resultData={resultData} peerComparison={peerComparison} isAboveAverage={isAboveAverage} scoreDiff={scoreDiff} />
@@ -192,7 +207,14 @@ const Result = () => {
                     </p>
                 </div>
 
+                {/* 첫 번째 PDF 분할 지점: 요약 및 차트 끝 */}
+                <div data-pdf-break style={{ height: '0px', width: '100%', margin: '0' }}></div>
+
                 <DiagnosticList surveyCategories={surveyCategories} resultData={resultData} peerComparison={peerComparison} />
+
+                {/* 두 번째 PDF 분할 지점: 세부 영역 진단 끝 */}
+                <div data-pdf-break style={{ height: '0px', width: '100%', margin: '0' }}></div>
+
                 <PrescriptionList worstTwo={worstTwo} />
 
                 <div className="card mb-8" style={{ background: 'var(--primary-light)', border: '1px solid var(--border-color)' }}>
@@ -215,19 +237,27 @@ const Result = () => {
                 </footer>
             </div>
 
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', padding: '0 1rem', maxWidth: '600px', margin: '1.5rem auto 0' }}>
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem', padding: '0 1rem', maxWidth: '600px', margin: '1.5rem auto 0', flexWrap: 'wrap' }}>
+                <button
+                    className="btn btn-outline"
+                    onClick={() => exportToPDF('result-capture-area', 'KRRI_은퇴준비리포트.pdf')}
+                    disabled={isExporting}
+                    style={{ flex: 1, minWidth: '120px', padding: '1rem 0.5rem', fontSize: 'var(--text-md)' }}
+                >
+                    {isExporting ? '처리 중...' : 'PDF 다운로드'}
+                </button>
                 <button
                     className="btn btn-primary"
-                    onClick={() => exportToImage('result-capture-area', 'KRRI_진단결과.png')}
+                    onClick={() => exportToImage('result-capture-area', 'KRRI_은퇴준비리포트.png')}
                     disabled={isExporting}
-                    style={{ flex: 1, padding: '1rem', fontSize: 'var(--text-md)' }}
+                    style={{ flex: 1, minWidth: '120px', padding: '1rem 0.5rem', fontSize: 'var(--text-md)' }}
                 >
-                    {isExporting ? '저장 중...' : '이미지 저장'}
+                    {isExporting ? '처리 중...' : '이미지 저장'}
                 </button>
                 <button
                     className="btn btn-outline"
                     onClick={() => navigate('/')}
-                    style={{ flex: 1, padding: '1rem', fontSize: 'var(--text-md)' }}
+                    style={{ width: '100%', padding: '1rem', fontSize: 'var(--text-md)', marginTop: '0.5rem' }}
                 >
                     처음으로
                 </button>

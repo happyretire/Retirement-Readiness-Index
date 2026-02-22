@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import html2canvas from 'html2canvas';
+import { downloadAsPDF } from '../utils/exportUtils';
 
 export const useExport = () => {
     const [isExporting, setIsExporting] = useState(false);
@@ -62,5 +63,30 @@ export const useExport = () => {
         }
     };
 
-    return { exportToImage, isExporting };
+    const exportToPDF = async (elementId, filename = 'KRRI_Result.pdf') => {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        try {
+            setIsExporting(true);
+
+            // 캡처 전 스크롤 조정
+            const scrollContainer = document.querySelector('.main-content');
+            if (scrollContainer) {
+                scrollContainer.scrollTo(0, 0);
+            }
+
+            // 렌더링 안정화를 위해 대기
+            await new Promise(r => setTimeout(r, 500));
+
+            // exportUtils의 downloadAsPDF 함수 호출
+            await downloadAsPDF(element, filename);
+        } catch (error) {
+            console.error('PDF 저장 중 오류 발생:', error);
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
+    return { exportToImage, exportToPDF, isExporting };
 };

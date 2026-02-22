@@ -45,7 +45,7 @@ const Profile = () => {
             </h2>
             <div style={{ background: 'var(--primary-light)', padding: '1rem', borderRadius: 'var(--radius-md)', marginBottom: '2rem' }}>
                 <p className="text-main" style={{ fontSize: 'var(--text-sm)' }}>
-                    🔒 <strong>안심하세요!</strong> 입력하신 개인정보와 자산 규모는 앱 종료 시 <strong>즉시 삭제</strong>되며, 오직 정밀한 은퇴 수명 계산을 위해서만 1회성으로 사용됩니다.
+                    🔒 <strong>안심하세요!</strong> 입력하신 개인정보와 자산 규모는 앱 종료 시 <strong>즉시 삭제</strong>되며, 개인별 맞춤 은퇴 준비도 진단을 위해서만 1회성으로 사용됩니다.
                 </p>
             </div>
 
