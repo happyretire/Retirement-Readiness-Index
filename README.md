@@ -1,16 +1,51 @@
-# React + Vite
+# 🧭 인생 2막 나침반 (은퇴 준비 지수 진단)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**"행복한 내일을 위한 오늘의 진단, 지금 시작해보세요."**
 
-Currently, two official plugins are available:
+'인생 2막 나침반'은 은퇴를 앞두거나 이미 시작하신 40~60대 분들이 자신의 준비 상태를 객관적으로 점검하고, 더 나은 미래를 설계할 수 있도록 돕는 전문 진단 도구입니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 👋 서비스 소개
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+은퇴 준비, 막막하셨나요? 
+단순히 돈이 얼마나 있는지를 넘어 **재무, 건강, 관계, 활동, 환경**이라는 5가지 핵심 영역을 통해 당신의 은퇴 준비 수준을 입체적으로 분석해 드립니다.
 
-## Expanding the ESLint configuration
+- **나의 위치 확인**: 나와 비슷한 연령대와 비교하여 내가 어느 정도 준비되었는지 확인하세요.
+- **맞춤형 분석**: 진단 결과에 따라 당신에게 꼭 필요한 '인생 액션 플랜'을 제공합니다.
+- **결과 이미지 저장**: 분석 보고서를 이미지로 저장하여 가족과 공유하거나 보관할 수 있습니다.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ✨ 주요 기능
+
+| 기능 | 설명 |
+| :--- | :--- |
+| **5대 영역 진단** | 재무, 건강 등 은퇴 후 삶의 질을 결정하는 핵심 항목 체크 |
+| **비교 분석 차트** | 그룹 평균 데이터와 나의 데이터를 한눈에 비교 |
+| **우선 보완 처방전** | 가장 부족한 영역을 채우기 위한 구체적인 행동 지침 제안 |
+| **결과 저장 및 공유** | 진단 결과를 선명한 이미지 파일로 다운로드 |
+
+---
+
+## 🚀 사용 방법
+
+1. **[진단 페이지 접속]**: [https://happyretire.github.io/Retirement-Readiness-Index/](https://happyretire.github.io/Retirement-Readiness-Index/) 클릭
+2. **[정보 입력]**: 간단한 연령대와 현재 상황을 선택합니다.
+3. **[진단 시작]**: 5분 내외의 설문 문항에 솔직하게 답해 주세요.
+4. **[결과 확인]**: 당신의 '인생 2막 페르소나'와 종합 점수를 확인합니다.
+5. **[이미지 저장]**: 화면 하단의 **'이미지 저장'** 버튼을 눌러 소중한 진단 결과를 간직하세요.
+
+---
+
+## 🤝 커뮤니티 안내
+
+더 많은 정보와 고민을 나누고 싶으신가요? 
+대한민국에서 가장 따뜻한 은퇴 준비 커뮤니티로 초대합니다.
+
+- **네이버 카페**: [행복한 은퇴를 꿈꾸는 사람들](https://cafe.naver.com/retireclass)
+- **저작권**: ⓒ Dunam
+
+---
+
+**당신의 빛나는 인생 2막, 우리가 함께하겠습니다.** 🌟
